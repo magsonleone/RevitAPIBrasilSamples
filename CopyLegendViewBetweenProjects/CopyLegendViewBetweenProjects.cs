@@ -1,4 +1,4 @@
-public void copiar_legenda()
+public void CopyLegendViewBetweenProjects()
 {
 	try 
 	{
@@ -10,7 +10,7 @@ public void copiar_legenda()
         coll = coll.WhereElementIsNotElementType().OfClass(typeof(View));
         var v = coll.First(a=> ((View)a).ViewType == ViewType.Legend);
         col.Add(v.Id);
-        Transaction t = new Transaction(doc2,"copiar legenda");
+        Transaction t = new Transaction(doc2,"CopyLegendViewBetweenProjects");
         t.Start();
         ElementTransformUtils.CopyElements(doc1,col,doc2,null,op);
         t.Commit();
