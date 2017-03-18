@@ -17,19 +17,19 @@ namespace FixPurgedLegend
 		try 
 		{
 			UIApplication uiapp = commandData.Application;
-			Document doc_source = uiapp.ActiveUIDocument.Document;
-			Document doc_destation = uiapp.Application.Documents.Cast<Document>().First(a=>a.Title!=doc_source.Title);
-			CopyPasteOptions op = new CopyPasteOptions();
-			FilteredElementCollector col = new FilteredElementCollector(doc_source);
+			Document sourceDocument = uiapp.ActiveUIDocument.Document;
+			Document destinationDocument = uiapp.Application.Documents.Cast<Document>().First(a=>a.Title!=sourceDocument.Title);
+			CopyPasteOptions options = new CopyPasteOptions();
+			FilteredElementCollector col = new FilteredElementCollector(sourceDocument);
 			col = col.WhereElementIsNotElementType().OfClass(typeof(View));
 			ElementId id = col.First(a=> ((View)a).ViewType == ViewType.Legend).Id;
-			ICollection<ElementId> list_ids = new List<ElementId>();
-			list_ids.Add(id);
-			Transaction t = new Transaction(doc_destation, "FixPurgedLegend");
-			t.Start();
-			ElementTransformUtils.CopyElements(doc_source,list_ids, doc_destation, null,op);
-			t.Commit();
-			t.Dispose();
+			ICollection<ElementId> elementsToCopy = new List<ElementId>();
+			elementsToCopy.Add(id);
+			Transaction transaction = new Transaction(destinationDocument, "FixPurgedLegend");
+			transaction.Start();
+			ElementTransformUtils.CopyElements(sourceDocument, elementsToCopy, destinationDocument, null,options);
+			transaction.Commit();
+			transaction.Dispose();
 		} 
 		catch (Exception ex)
 		{
